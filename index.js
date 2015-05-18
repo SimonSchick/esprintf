@@ -161,11 +161,11 @@ function esprintf(formatString) {
 			if (assocReference) {
 				throw new Error('Cannot use associative parameters mixed with non associative');
 			}
-			value = parentArguments[reference];
+			value = parentArguments[valueIdx++];
 		}
 
 		if (width === '*') {
-			width = parentArguments[reference++];
+			width = parentArguments[valueIdx++];
 			if (!width) {
 				throw new Error('No value for dynamic width for parameter no. ' + (reference - 2));
 			}
@@ -174,7 +174,7 @@ function esprintf(formatString) {
 
 		precision = parseInt(precision) || 6;
 		if (precision === '*') {
-			precision = parentArguments[reference++];
+			precision = parentArguments[valueIdx++];
 			if (!precision) {
 				throw new Error('No value for dynamic precision for parameter no. ' + (reference - 3));
 			}
