@@ -1,0 +1,30 @@
+{
+  "name": "esprintf",
+  "version": "0.1.0",
+  "description": "(function() {",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/SimonSchick/esprintf.git"
+  },
+  "keywords": [
+    "sprintf",
+    "c99"
+  ],
+  "author": "Simon Schick",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/SimonSchick/esprintf/issues"
+  },
+   "devDependencies": {
+    "gulp": "~3.8.11",
+    "gulp-load-plugins": "~0.10.0",
+    "q": "~1.4.1",
+    "gulp-jscs": "^1.4.0",
+    "gulp-jshint": "^1.9.4",
+    "jshint-stylish": "^1.0.1"
+  }
+}

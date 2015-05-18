@@ -1,0 +1,7 @@
+languages:
+  - javascript
+exclude:
+  - "**/node_modules/**"
+  - "**/*.min.js"
+min-tokens: 60
+min-lines: 10

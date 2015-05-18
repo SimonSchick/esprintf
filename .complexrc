@@ -1,0 +1,13 @@
+{
+	"filepattern": "\\.js$",
+	"output": "complexityreport.md",
+	"format": "markdown",
+	"excludepattern": "node_modules|docs",
+	"dirpattern": "./",
+	"silent": false,
+	"logicalor": false,
+	"switchcase": false,
+	"forin": false,
+	"trycatch": false,
+	"newmi": false
+}

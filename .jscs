@@ -1,0 +1,74 @@
+{
+	"requireCurlyBraces": [
+		"if",
+		"else",
+		"for",
+		"while",
+		"do",
+		"try",
+		"catch"
+	],
+	"requireOperatorBeforeLineBreak": true,
+	"requireParenthesesAroundIIFE": true,
+	"requireCommaBeforeLineBreak": true,
+	"requireDotNotation": true,
+	"maximumLineLength": {
+		"value": 120,
+		"tabSize": 4,
+		"allowUrlComments": true,
+		"allowRegex": true
+	},
+
+	"disallowMixedSpacesAndTabs": "smart",
+	"disallowTrailingWhitespace": true,
+	"disallowMultipleLineStrings": true,
+	"disallowTrailingComma": true,
+
+
+	"requireSpacesInFunctionExpression": {
+		"beforeOpeningCurlyBrace": true
+	},
+	"requireSpaceAfterKeywords": [
+		"if",
+		"else",
+		"for",
+		"while",
+		"do",
+		"switch",
+		"return",
+		"try",
+		"catch"
+	],
+	"requireSpacesInConditionalExpression": true,
+	"requireSpaceAfterBinaryOperators": true,
+	"requireLineFeedAtFileEnd": true,
+
+	"requireSpaceBeforeBinaryOperators": [
+		"=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", ">>>=",
+		"&=", "|=", "^=", "+=",
+
+		"+", "-", "*", "/", "%", "<<", ">>", ">>>", "&",
+		"|", "^", "&&", "||", "===", "==", ">=",
+		"<=", "<", ">", "!=", "!=="
+	],
+	"requireSpacesInAnonymousFunctionExpression": {
+		"beforeOpeningCurlyBrace": true,
+		"beforeOpeningRoundBrace": true
+	},
+	"requireSpacesInNamedFunctionExpression": {
+		"beforeOpeningCurlyBrace": true,
+		"beforeOpeningRoundBrace": true
+	},
+
+	"disallowKeywords": [ "with", "eval" ],
+	"disallowSpaceAfterObjectKeys": true,
+	"disallowSpaceAfterPrefixUnaryOperators": true,
+	"disallowSpaceBeforePostfixUnaryOperators": true,
+	"disallowSpaceBeforeBinaryOperators": [ ",", ":" ],
+
+	"excludeFiles": [
+	  "node_modules",
+	  "config",
+	  "doc"
+	]
+}

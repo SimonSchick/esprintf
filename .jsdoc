@@ -1,0 +1,42 @@
+{
+	"tags": {
+		"allowUnknownTags":	false,
+		"dictionaries":		["jsdoc","closure"]
+	},
+	"plugins": ["plugins/markdown"],
+
+	"source": {
+		"include":			["./"],
+		"includePattern":	".+\\.js(doc)?$",
+		"excludePattern":	"node_modules"
+	},
+
+	"opts": {
+		"recurse":		true,
+		"destination":	"./docs/",
+		"private":		true,
+		"pedantic":		true,
+		"readme":		"./README.md"
+	},
+
+	"templates": {
+		"cleverLinks"           : false,
+		"monospaceLinks"        : false,
+		"dateFormat"            : "ddd MMM Do YYYY",
+		"outputSourceFiles"     : true,
+		"outputSourcePath"      : true,
+		"systemName"            : "Submitter",
+		"footer"                : "",
+		"copyright"             : "Copyright Omnea GmbH © 2015.",
+		"navType"               : "vertical",
+		"theme"                 : "cerulean",
+		"linenums"              : true,
+		"collapseSymbols"       : false,
+		"inverseNav"            : true,
+		"highlightTutorialCode" : true
+	},
+	"markdown"  : {
+		"parser":	"gfm",
+		"hardwrap":	true
+	}
+}

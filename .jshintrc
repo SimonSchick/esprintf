@@ -1,0 +1,20 @@
+{
+	"node": true,
+	"bitwise": false,
+	"boss": false,
+	"evil": false,
+	"curly": true,
+	"eqeqeq": true,
+	"latedef": true,
+	"loopfunc": false,
+	"noarg": true,
+	"nonbsp": true,
+	"notypeof": true,
+	"quotmark": "single",
+	"shadow": false,
+	"unused": "vars",
+	"undef": true,
+	"withstmt": false,
+	"predef": ["rekuire"],
+	"maxparams": 4
+}
