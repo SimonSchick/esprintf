@@ -10,6 +10,9 @@ function repeat(str, num) {
 }
 
 function paddLeft(str, length, what) {
+	if(length === str.length) {
+		return str;
+	}
 	if (length <= str.length) {
 		return str.substring(0, length);
 	}
@@ -18,6 +21,9 @@ function paddLeft(str, length, what) {
 }
 
 function paddRight(str, length, what) {
+	if(length === str.length) {
+		return str;
+	}
 	if (length <= str.length) {
 		return str.substring(0, length);
 	}
@@ -172,7 +178,7 @@ function esprintf(formatString) {
 			}
 		} else {
 			width = parseInt(width);
-			if(!width) {
+			if (!width) {
 				width = value.length;
 			}
 		}
@@ -212,7 +218,7 @@ function esprintf(formatString) {
 
 		var method = leftJustify ? paddRight : paddLeft;
 
-		if(padding === '0') {
+		if (padding === '0') {
 			return fullPrefix + method(ret, width, '0');
 		}
 		return method(fullPrefix + ret, width, padding);
