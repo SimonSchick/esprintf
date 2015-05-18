@@ -11,7 +11,7 @@ function repeat(str, num) {
 
 function paddLeft(str, length, what) {
 	if (length <= str.length) {
-		return str;
+		return str.substring(0, length);
 	}
 	what = what || ' ';
 	return repeat(what, length - str.length) + str;
@@ -19,7 +19,7 @@ function paddLeft(str, length, what) {
 
 function paddRight(str, length, what) {
 	if (length <= str.length) {
-		return str;
+		return str.substring(0, length);
 	}
 	what = what || ' ';
 	return str + repeat(what, length - str.length);
@@ -166,11 +166,16 @@ function esprintf(formatString) {
 
 		if (width === '*') {
 			width = parentArguments[valueIdx++];
+
 			if (width === undefined) {
 				throw new Error('No value for dynamic width for parameter no. ' + (reference - 2));
 			}
+		} else {
+			width = parseInt(width);
+			if(!width) {
+				width = value.length;
+			}
 		}
-		width = parseInt(width) || 0;
 
 		precision = parseInt(precision) || 6;
 		if (precision === '*') {
@@ -205,10 +210,12 @@ function esprintf(formatString) {
 			)
 		);
 
-
 		var method = leftJustify ? paddRight : paddLeft;
 
-		return padding === '0' ? fullPrefix + method(ret, width, '0') : method(fullPrefix + ret, width, padding);
+		if(padding === '0') {
+			return fullPrefix + method(ret, width, '0');
+		}
+		return method(fullPrefix + ret, width, padding);
 	});
 }
 
