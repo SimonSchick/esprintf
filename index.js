@@ -10,9 +10,6 @@ function repeat(str, num) {
 }
 
 function paddLeft(str, length, what) {
-	if(length === str.length) {
-		return str;
-	}
 	if (length <= str.length) {
 		return str.substring(0, length);
 	}
@@ -21,9 +18,6 @@ function paddLeft(str, length, what) {
 }
 
 function paddRight(str, length, what) {
-	if(length === str.length) {
-		return str;
-	}
 	if (length <= str.length) {
 		return str.substring(0, length);
 	}
