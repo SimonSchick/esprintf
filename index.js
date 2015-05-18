@@ -166,7 +166,7 @@ function esprintf(formatString) {
 
 		if (width === '*') {
 			width = parentArguments[valueIdx++];
-			if (!width) {
+			if (width === undefined) {
 				throw new Error('No value for dynamic width for parameter no. ' + (reference - 2));
 			}
 		}
@@ -175,7 +175,7 @@ function esprintf(formatString) {
 		precision = parseInt(precision) || 6;
 		if (precision === '*') {
 			precision = parentArguments[valueIdx++];
-			if (!precision) {
+			if (precision === undefined) {
 				throw new Error('No value for dynamic precision for parameter no. ' + (reference - 3));
 			}
 		}
