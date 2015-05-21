@@ -111,6 +111,59 @@ describe('esprintf', function() {
 		});
 	});
 
+	describe('Index based formatting', function() {
+		it('Works with a single value', function() {
+			assert.equal(
+				esprintf('%1$s', 'woo'),
+				'woo'
+			);
+		});
+
+		it('Works with more than 1 value', function() {
+			assert.equal(
+				esprintf('%2$s %1$s', 'wuff', 'waff'),
+				'waff wuff'
+			);
+		});
+
+		it('Works with more than 1 referencing the same value', function() {
+			assert.equal(
+				esprintf('%1$s %1$s', 'wuff'),
+				'wuff wuff'
+			);
+		});
+	});
+
+	describe('Associative formatting', function() {
+		it('Works with a single value', function() {
+			assert.equal(
+				esprintf('%(test)s', {
+					test: 'woo'
+				}),
+				'woo'
+			);
+		});
+
+		it('Works with more than 1 value', function() {
+			assert.equal(
+				esprintf('%(test2)s %(test)s', {
+					test: 'wuff',
+					test2: 'waff'
+				}),
+				'waff wuff'
+			);
+		});
+
+		it('Works with more than 1 referencing the same value', function() {
+			assert.equal(
+				esprintf('%(test)s %(test)s', {
+					test:'wuff'
+				}),
+				'wuff wuff'
+			);
+		});
+	});
+
 	describe('madness', function() {
 		it('Is probably not a valid usecase', function() {
 			assert.equal(
