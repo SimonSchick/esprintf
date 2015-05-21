@@ -201,8 +201,6 @@ function esprintf(formatString) {
 		var allowSign = specifier.allowSign;
 		var prefix = specifier.prefix;
 
-		ret = ret.toString().replace('-', '');
-
 		var fullPrefix = (forcePrecisionOrPrefix ? prefix : '') +
 		(
 			(forceSign && allowSign === '+' && value > 0) ? '+' : (
