@@ -1,5 +1,8 @@
 # esprintf
 
+[![NPM](https://nodei.co/npm/esprintf.png)](https://nodei.co/npm/esprintf/)
+[![Build Status](https://travis-ci.org/SimonSchick/esprintf.svg?branch=master)](https://travis-ci.org/SimonSchick/esprintf)
+
 ## Requirements & Installation
 
 Just run npm install esprintf
