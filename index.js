@@ -90,7 +90,7 @@ var specifiers = {
 		type: types.number
 	},
 	G: {
-		transform: function(a, b) { return specifiers.g.transform(a, b).toUpperCase(); },
+		transform: function(a, b) { return a.toPrecision(b).toUpperCase(); },
 		allowSign: true,
 		type: types.number
 	},
@@ -109,7 +109,12 @@ var specifiers = {
 		type: types.number
 	},
 	c: {
-		transform: String.fromCharCode
+		transform: function(a, b) {
+			if (typeof a !== 'number') {
+				throw new TypeError('Argument for %c must be a number');
+			}
+			return String.fromCharCode(a);
+		}
 	},
 	s: {
 		type: types.string
@@ -117,12 +122,17 @@ var specifiers = {
 	b: {
 		transform: function(a, b) { return precBase(2, a, b); },
 		type: types.number
+	},
+	j: {
+		transform: function(a, b, customPadding) {
+			return JSON.stringify(a, null, customPadding);
+		}
 	}
 };
 
 specifiers.i = specifiers.d;
 
-var reg = /%(?:(\d+)\$|\((\w+)\))?([+ #-]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*))?([bdiuoxXfFeEgGaAcsp%])/g;
+var reg = /%(?:(\d+)\$|\((\w+)\))?([+#-]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*))?([bdiuoxXfFeEgGaAcsj%])/g;
 
 function esprintf(formatString) {
 	var valueIdx = 1;
@@ -135,6 +145,7 @@ function esprintf(formatString) {
 		if (type === '%') {
 			return '%';
 		}
+
 		reference = parseInt(reference) || valueIdx;
 
 		flags = flags || '';
@@ -150,9 +161,9 @@ function esprintf(formatString) {
 
 		var value;
 
-		if (isAssoc) {
+		if (isAssoc && type !== 'j') {
 			if (!assocReference) {
-				throw new Error('Cannot use associative parameters mixed with non associative');
+				throw new SyntaxError('Cannot use associative parameters mixed with non associative');
 			}
 			value = parentArguments[1][assocReference];
 			if (value === undefined) {
@@ -160,7 +171,7 @@ function esprintf(formatString) {
 			}
 		} else {
 			if (assocReference) {
-				throw new Error('Cannot use associative parameters mixed with non associative');
+				throw new SyntaxError('Cannot use associative parameters mixed with non associative');
 			}
 			value = parentArguments[valueIdx++];
 		}
@@ -195,7 +206,7 @@ function esprintf(formatString) {
 		if (specifier.type === types.number && !parseInt(value)) {
 			throw new TypeError('Invalid value for format parameter no. ' + (reference - 1) + ' expected number, got string');
 		}
-		var ret = specifier.transform ? specifier.transform(value, precision) : value;
+		var ret = specifier.transform ? specifier.transform(value, precision, customPadding) : value;
 
 		var allowSign = specifier.allowSign;
 		var prefix = specifier.prefix;
@@ -217,7 +228,9 @@ function esprintf(formatString) {
 			}
 			return method(fullPrefix + ret, width, padding);
 		}
+
 		return fullPrefix + ret;
+
 	});
 }
 

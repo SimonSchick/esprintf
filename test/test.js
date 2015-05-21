@@ -6,7 +6,7 @@ var assert = require('assert');
 /* global describe, it */
 
 describe('esprintf', function() {
-	describe('Testing string formatting', function() {
+	describe('%s', function() {
 		it('Does not delete dashes from the formatted string', function() {
 			assert.equal(esprintf('%s', '-'), '-');
 		});
@@ -31,7 +31,7 @@ describe('esprintf', function() {
 		});
 	});
 
-	describe('Testing integer formatting', function() {
+	describe('%i', function() {
 		it('Correctly formats a single integer', function() {
 			assert.equal(esprintf('%i', 123456), '123456');
 		});
@@ -47,9 +47,13 @@ describe('esprintf', function() {
 		it('Correctly padds a single integer with zeros', function() {
 			assert.equal(esprintf('%07i', 123456), '0123456');
 		});
+
+		it('Correctly rounds to an integer value', function() {
+			assert.equal(esprintf('%i', 3.1415), '3');
+		});
 	});
 
-	describe('Testing float formatting', function() {
+	describe('%f', function() {
 		it('Correctly formats a single float', function() {
 			assert.equal(esprintf('%f', 123456.12345), '123456.12345');
 		});
@@ -68,6 +72,70 @@ describe('esprintf', function() {
 
 		it('Correctly padds a single float with zeros and a floating point length of 2', function() {
 			assert.equal(esprintf('%010.2f', 123456.12), '0123456.12');
+		});
+	});
+
+	describe('%x', function() {
+		it('Single value', function() {
+			assert.equal(esprintf('%x', 0xff), 'ff');
+		});
+
+		it('Single value with forced prefix', function() {
+			assert.equal(esprintf('%#x', 0xff), '0xff');
+		});
+	});
+
+	describe('%c', function() {
+		it('Single value', function() {
+			assert.equal(esprintf('%c', 'a'.charCodeAt(0)), 'a');
+		});
+	});
+
+	describe('%b', function() {
+		it('Single value', function() {
+			assert.equal(esprintf('%b', 15), '1111');
+		});
+	});
+
+	describe('%j', function() {
+		it('Single value', function() {
+			assert.equal(esprintf('%j', {
+				top: 'kek'
+			}), '{"top":"kek"}');
+		});
+
+		it('Single value with custom padding', function() {
+			assert.equal(esprintf('%\'\tj', {
+				top: 'kek'
+			}), '{\n\t"top": "kek"\n}');
+		});
+	});
+
+	describe('madness', function() {
+		it('Is probably not a valid usecase', function() {
+			assert.equal(
+				esprintf(
+					'%b %d %i %u %o %x %X %f %F %e %E %g %G %a %A %c %s',
+					111,//b
+					42,//d
+					42,//i
+					42,//u
+					42,//o
+					42,//x
+					42,//X
+					42.42,//f
+					42.42,//F
+					42154654.42,//e
+					42154654.42,//E
+					42154654.42,//g
+					42154654.42,//G
+					42154654.42,//a
+					42154654.42,//A
+					'a'.charCodeAt(0),//c
+					'aefiosf'//s
+				),
+				'110111 42 42 42 52 2a 2A 42.42 42.420000 4.215465e+7 4.215465E+7 4.21547e+7 4.21547E+7 2833a9e.6b851ep0 2833A9E.6B851EP0 a aefiosf'
+			);
 		});
 	});
 });
