@@ -1,11 +1,10 @@
 'use strict';
 
-var reg = /%(?:(\d+)\$|\((\w+)\))?([+ #-]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*))?([bdiuoxXfFeEgGaAcsp%])/g;
-
 function repeat(str, num) {
 	if (num < 0) {
 		return '';
 	}
+
 	return new Array(num + 1).join(str);
 }
 
@@ -123,6 +122,8 @@ var specifiers = {
 
 specifiers.i = specifiers.d;
 
+var reg = /%(?:(\d+)\$|\((\w+)\))?([+ #-]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*))?([bdiuoxXfFeEgGaAcsp%])/g;
+
 function esprintf(formatString) {
 	var valueIdx = 1;
 	var parentArguments = arguments;
@@ -172,9 +173,6 @@ function esprintf(formatString) {
 			}
 		} else {
 			width = parseInt(width);
-			if (!width) {
-				width = value.length;
-			}
 		}
 
 		precision = parseInt(precision) || 6;
@@ -198,22 +196,28 @@ function esprintf(formatString) {
 			throw new TypeError('Invalid value for format parameter no. ' + (reference - 1) + ' expected number, got string');
 		}
 		var ret = specifier.transform ? specifier.transform(value, precision) : value;
+
 		var allowSign = specifier.allowSign;
 		var prefix = specifier.prefix;
 
+		ret = ret.toString();
+
 		var fullPrefix = (forcePrecisionOrPrefix ? prefix : '') +
 		(
-			(forceSign && allowSign === '+' && value > 0) ? '+' : (
+			(forceSign && allowSign && value > 0) ? '+' : (
 				(value < 0) ? '-' : (blankFill ? ' ' : '')
 			)
 		);
 
-		var method = leftJustify ? paddRight : paddLeft;
+		if (width !== undefined && width === width) {
+			var method = leftJustify ? paddRight : paddLeft;
 
-		if (padding === '0') {
-			return fullPrefix + method(ret, width, '0');
+			if (padding === '0') {
+				return fullPrefix + method(ret, width, '0');
+			}
+			return method(fullPrefix + ret, width, padding);
 		}
-		return method(fullPrefix + ret, width, padding);
+		return fullPrefix + ret;
 	});
 }
 
