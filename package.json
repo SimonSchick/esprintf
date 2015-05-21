@@ -19,12 +19,13 @@
   "bugs": {
     "url": "https://github.com/SimonSchick/esprintf/issues"
   },
-   "devDependencies": {
+  "devDependencies": {
     "gulp": "~3.8.11",
-    "gulp-load-plugins": "~0.10.0",
-    "q": "~1.4.1",
     "gulp-jscs": "^1.4.0",
     "gulp-jshint": "^1.9.4",
-    "jshint-stylish": "^1.0.1"
+    "gulp-load-plugins": "~0.10.0",
+    "jshint-stylish": "^1.0.1",
+    "mocha": "^2.2.5",
+    "q": "~1.4.1"
   }
 }
