@@ -134,7 +134,9 @@ describe('esprintf', function() {
 					'a'.charCodeAt(0),//c
 					'aefiosf'//s
 				),
-				'110111 42 42 42 52 2a 2A 42.42 42.420000 4.215465e+7 4.215465E+7 4.21547e+7 4.21547E+7 2833a9e.6b851ep0 2833A9E.6B851EP0 a aefiosf'
+				//jscs:disable
+				'110111 42 42 42 52 2a 2A 42.42 42.420000 4.215465e+7 4.215465E+7 4.21547e+7 4.21547E+7 2833a9e.6b851ep0 2833A9E.6B851EP0 a aefiosf'// jshint ignore:line
+				//jscs:enable
 			);
 		});
 	});
