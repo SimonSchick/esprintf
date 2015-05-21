@@ -1,13 +1,25 @@
 'use strict';
 
+/**
+ * Repeats a string num times.
+ * @param  {string} str
+ * @param  {number} num
+ * @return {string}
+ */
 function repeat(str, num) {
 	if (num < 0) {
 		return '';
 	}
-
 	return new Array(num + 1).join(str);
 }
 
+/**
+ * Padds or truncates a string left.
+ * @param  {string} str    The string to be modified
+ * @param  {number} length Length of the final string
+ * @param  {string} what   The padding string(should be one character)
+ * @return {string}
+ */
 function paddLeft(str, length, what) {
 	if (length <= str.length) {
 		return str.substring(0, length);
@@ -16,6 +28,13 @@ function paddLeft(str, length, what) {
 	return repeat(what, length - str.length) + str;
 }
 
+/**
+ * Padds or truncates a string right.
+ * @param  {string} str    The string to be modified
+ * @param  {number} length Length of the final string
+ * @param  {string} what   The padding string(should be one character)
+ * @return {string}
+ */
 function paddRight(str, length, what) {
 	if (length <= str.length) {
 		return str.substring(0, length);
@@ -24,6 +43,12 @@ function paddRight(str, length, what) {
 	return str + repeat(what, length - str.length);
 }
 
+/**
+ * Utility function to check if a string is included in a string
+ * @param  {string} str
+ * @param  {string} what
+ * @return {boolean}
+ */
 function contains(str, what) {
 	return str.indexOf(what) !== -1;
 }
@@ -33,12 +58,20 @@ var types = {
 	string: 1
 };
 
+/**
+ * Converts the given value to the new numeric base and truncates the precision to the given value.
+ * @param  {number} base Should follow the restrictions of Number.prototype.toString()
+ * @param  {number} value
+ * @param  {number} precision
+ * @return {string}
+ */
 function precBase(base, value, precision) {
 	var val = value.toString(base);
 	var floatingPoint = val.indexOf('.');
 	return val.substring(0, floatingPoint + precision + 1);
 }
 
+//List of possible specifiers with transformation and validation
 var specifiers = {
 	d: {
 		transform: function(a) { return a | 0; },
@@ -129,13 +162,22 @@ var specifiers = {
 		}
 	}
 };
-
+//Alias
 specifiers.i = specifiers.d;
 
+//The regex used for matching flags
 var reg = /%(?:(\d+)\$|\((\w+)\))?([+#-]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*))?([bdiuoxXfFeEgGaAcsj%])/g;
 
+/**
+ * Formats arguments according to the given format string.
+ * Supports sequential, referential and associative formatting rules.
+ * @param  {string} formatString
+ * @param  {...number|Object} vararg The arguments to be passed when formatting non-associative
+ * OR the object holding the key value pairs for associative formatting
+ * @return {string}
+ */
 function esprintf(formatString) {
-	var valueIdx = 1;
+	var valueIdx = 0;
 	var parentArguments = arguments;
 	var isAssoc = arguments[1] instanceof Object;
 	// jshint maxparams:10
@@ -145,6 +187,8 @@ function esprintf(formatString) {
 		if (type === '%') {
 			return '%';
 		}
+
+		valueIdx++;
 
 		reference = parseInt(reference) || valueIdx;
 
@@ -161,7 +205,7 @@ function esprintf(formatString) {
 
 		var value;
 
-		if (isAssoc && type !== 'j') {
+		if (isAssoc && type !== 'j') {//special handling of JSON :/
 			if (!assocReference) {
 				throw new SyntaxError('Cannot use associative parameters mixed with non associative');
 			}
@@ -173,11 +217,12 @@ function esprintf(formatString) {
 			if (assocReference) {
 				throw new SyntaxError('Cannot use associative parameters mixed with non associative');
 			}
-			value = parentArguments[valueIdx++];
+			value = parentArguments[reference];
 		}
 
 		if (width === '*') {
-			width = parentArguments[valueIdx++];
+			width = parentArguments[++reference];
+			valueIdx++;
 
 			if (width === undefined) {
 				throw new Error('No value for dynamic width for parameter no. ' + (reference - 2));
@@ -188,7 +233,8 @@ function esprintf(formatString) {
 
 		precision = parseInt(precision) || 6;
 		if (precision === '*') {
-			precision = parentArguments[valueIdx++];
+			precision = parentArguments[++reference];
+			valueIdx++;
 			if (precision === undefined) {
 				throw new Error('No value for dynamic precision for parameter no. ' + (reference - 3));
 			}
@@ -220,7 +266,7 @@ function esprintf(formatString) {
 			)
 		);
 
-		if (width !== undefined && width === width) {
+		if (width !== undefined && width === width) {//width might be NaN
 			var method = leftJustify ? paddRight : paddLeft;
 
 			if (padding === '0') {
