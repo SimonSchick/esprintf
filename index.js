@@ -66,7 +66,6 @@ var types = {
  * @return {string}
  */
 function precBase(base, value, precision) {
-	console.log(value);
 	var val = value.toString(base);
 	var floatingPoint = val.indexOf('.');
 	if(floatingPoint === -1) {
