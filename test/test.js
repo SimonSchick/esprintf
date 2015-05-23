@@ -72,7 +72,7 @@ describe('esprintf', function() {
 
 	describe('%f', function() {
 		it('Correctly formats a single float', function() {
-			assert.equal(esprintf('%f', 123456.12345), (123456.12345).toLocaleString());
+			assert.equal(esprintf('%f', 123456.12345), (123456.12345).toLocaleString() + '000');
 		});
 
 		it('Correctly formats a single float with forced prefix', function() {
