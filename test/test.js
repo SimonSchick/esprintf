@@ -5,6 +5,7 @@ var assert = require('assert');
 
 /* global describe, it */
 
+
 describe('esprintf', function() {
 	describe('%s', function() {
 		it('Does not delete dashes from the formatted string', function() {
@@ -55,23 +56,23 @@ describe('esprintf', function() {
 
 	describe('%f', function() {
 		it('Correctly formats a single float', function() {
-			assert.equal(esprintf('%f', 123456.12345), '123456.12345');
+			assert.equal(esprintf('%f', 123456.12345), (123456.12345).toLocaleString());
 		});
 
 		it('Correctly formats a single float with forced prefix', function() {
-			assert.equal(esprintf('%+f', 12346.123), '+12346.123');
+			assert.equal(esprintf('%+f', 12346.123), '+' + (12346.123).toLocaleString());
 		});
 
 		it('Correctly truncates a single float with fixed length', function() {
-			assert.equal(esprintf('%3f', 123456.123), '123');
+			assert.equal(esprintf('%3f', 123456.123), (123).toLocaleString());
 		});
 
 		it('Correctly padds a single float with zeros', function() {
-			assert.equal(esprintf('%09f', 123456), '000123456');
+			assert.equal(esprintf('%09f', 123456), '000' + (123456).toLocaleString());
 		});
 
 		it('Correctly padds a single float with zeros and a floating point length of 2', function() {
-			assert.equal(esprintf('%010.2f', 123456.12), '0123456.12');
+			assert.equal(esprintf('%010.2f', 123456.12), '0' + (123456.12).toLocaleString());
 		});
 	});
 
@@ -188,7 +189,7 @@ describe('esprintf', function() {
 					'aefiosf'//s
 				),
 				//jscs:disable
-				'110111 42 42 42 52 2a 2A 42.42 42.420000 4.215465e+7 4.215465E+7 4.21547e+7 4.21547E+7 2833a9e.6b851ep0 2833A9E.6B851EP0 a aefiosf'// jshint ignore:line
+				'110111 42 42 42 52 2a 2A ' + (42.42).toLocaleString() + ' 42.420000 4.215465e+7 4.215465E+7 4.21547e+7 4.21547E+7 2833a9e.6b851ep0 2833A9E.6B851EP0 a aefiosf'// jshint ignore:line
 				//jscs:enable
 			);
 		});
