@@ -112,7 +112,12 @@ var specifiers = {
 	},
 	f: {
 		transform: function(a, b) {
-			return precBase(10, a.toLocaleString(), b);
+			return precBase(10, a.toLocaleString(
+				undefined,
+				{
+					minimumSignificantDigits: 21
+				}
+			), b);
 		},
 		allowSign: true,
 		type: types.number

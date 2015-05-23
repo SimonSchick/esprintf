@@ -72,7 +72,7 @@ describe('esprintf', function() {
 
 	describe('%f', function() {
 		it('Correctly formats a single float', function() {
-			assert.equal(esprintf('%f', 123456.12345), (123456.12345).toLocaleString() + '000');
+			assert.equal(esprintf('%f', 123456.12345), (123456.12345).toLocaleString(undefined, {minimumSignificantDigits: 12}));
 		});
 
 		it('Correctly formats a single float with forced prefix', function() {
@@ -84,7 +84,7 @@ describe('esprintf', function() {
 		});
 
 		it('Correctly padds a single float with zeros', function() {
-			assert.equal(esprintf('%09f', 123456), paddLeft((123456).toLocaleString(), 9, '0'));
+			assert.equal(esprintf('%09f', 123456), paddLeft((123456).toLocaleString(undefined, {minimumSignificantDigits: 12}), 9, '0'));
 		});
 
 		it('Correctly padds a single float with zeros and a floating point length of 2', function() {
