@@ -66,9 +66,22 @@ var types = {
  * @return {string}
  */
 function precBase(base, value, precision) {
+	console.log(value);
 	var val = value.toString(base);
 	var floatingPoint = val.indexOf('.');
-	return val.substring(0, floatingPoint + precision + 1);
+	if(floatingPoint === -1) {
+		if(precision > 0) {
+			return val;
+		}
+		return val + '.' + repeat('0', precision);
+	}
+	if(val.length - floatingPoint > precision) {
+		return val.substring(0, floatingPoint + precision + 1);
+	} else if(val.length - floatingPoint < precision) {
+		return val + repeat('0', precision - (val.length - floatingPoint) + 1);
+	}
+	return val;
+
 }
 
 //List of possible specifiers with transformation and validation
@@ -99,7 +112,9 @@ var specifiers = {
 		type: types.number
 	},
 	f: {
-		transform: function(a, b) { return precBase(10, a.toLocaleString(), b); },
+		transform: function(a, b) {
+			return precBase(10, a.toLocaleString(), b);
+		},
 		allowSign: true,
 		type: types.number
 	},
