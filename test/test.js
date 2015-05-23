@@ -54,13 +54,29 @@ describe('esprintf', function() {
 		});
 	});
 
+	function repeat(str, num) {
+		if (num < 0) {
+			return '';
+		}
+		return new Array(num + 1).join(str);
+	}
+
+	function paddLeft(str, length, what) {
+		if (length <= str.length) {
+			return str.substring(0, length);
+		}
+		what = what || ' ';
+		return repeat(what, length - str.length) + str;
+	}
+
+
 	describe('%f', function() {
 		it('Correctly formats a single float', function() {
 			assert.equal(esprintf('%f', 123456.12345), (123456.12345).toLocaleString());
 		});
 
 		it('Correctly formats a single float with forced prefix', function() {
-			assert.equal(esprintf('%+f', 12346.123), '+' + (12346.123).toLocaleString());
+			assert.equal(esprintf('%+f', 12346.123), '+' + (12346.123).toLocaleString() + '000');
 		});
 
 		it('Correctly truncates a single float with fixed length', function() {
@@ -68,11 +84,11 @@ describe('esprintf', function() {
 		});
 
 		it('Correctly padds a single float with zeros', function() {
-			assert.equal(esprintf('%09f', 123456), '000' + (123456).toLocaleString());
+			assert.equal(esprintf('%09f', 123456), paddLeft((123456).toLocaleString(), 9, '0'));
 		});
 
 		it('Correctly padds a single float with zeros and a floating point length of 2', function() {
-			assert.equal(esprintf('%010.2f', 123456.12), '0' + (123456.12).toLocaleString());
+			assert.equal(esprintf('%010.2f', 123456.12), paddLeft((123456.12).toLocaleString(), 10, '0'));
 		});
 	});
 
@@ -95,6 +111,16 @@ describe('esprintf', function() {
 	describe('%b', function() {
 		it('Single value', function() {
 			assert.equal(esprintf('%b', 15), '1111');
+		});
+
+		it('Single floating point value', function() {
+			assert.equal(esprintf('%b', 111.1), '1101111.000110');
+		});
+	});
+
+	describe('%a', function() {
+		it('Single value', function() {
+			assert.equal(esprintf('%09a', 123456), '001e240p0');
 		});
 	});
 
@@ -169,7 +195,7 @@ describe('esprintf', function() {
 		it('Is probably not a valid usecase', function() {
 			assert.equal(
 				esprintf(
-					'%b %d %i %u %o %x %X %f %F %e %E %g %G %a %A %c %s',
+					'%b %d %i %u %o %x %X %5f %F %e %E %g %G %a %A %c %s',
 					111,//b
 					42,//d
 					42,//i
@@ -189,7 +215,7 @@ describe('esprintf', function() {
 					'aefiosf'//s
 				),
 				//jscs:disable
-				'110111 42 42 42 52 2a 2A ' + (42.42).toLocaleString() + ' 42.420000 4.215465e+7 4.215465E+7 4.21547e+7 4.21547E+7 2833a9e.6b851ep0 2833A9E.6B851EP0 a aefiosf'// jshint ignore:line
+				'1101111 42 42 42 52 2a 2A ' + (42.42).toLocaleString() + ' 42.420000 4.215465e+7 4.215465E+7 4.21547e+7 4.21547E+7 2833a9e.6b851ep0 2833A9E.6B851EP0 a aefiosf'// jshint ignore:line
 				//jscs:enable
 			);
 		});
