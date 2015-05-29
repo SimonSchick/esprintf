@@ -65,22 +65,24 @@ var types = {
  * @param  {number} precision
  * @return {string}
  */
-function precBase(base, value, precision) {
+function precBase(base, value, precision, onlyIfPrecision) {
 	var val = value.toString(base);
 	var floatingPoint = val.indexOf('.');
+	if(precision === 0 && floatingPoint > -1) {
+		return val.substring(0, floatingPoint);//Node version > 0.10.*
+	}
 	if(floatingPoint === -1) {
-		if(precision > 0) {
-			return val;
+		if(precision > 0 && !onlyIfPrecision) {
+			return val + '.' + repeat('0', precision);//Node v0.10.*
 		}
-		return val + '.' + repeat('0', precision);
+		return val;
 	}
 	if(val.length - floatingPoint > precision) {
 		return val.substring(0, floatingPoint + precision + 1);
 	} else if(val.length - floatingPoint < precision) {
-		return val + repeat('0', precision - (val.length - floatingPoint) + 1);
+		return val + repeat('0', precision - (val.length - floatingPoint) + 1);//Node v0.10.*
 	}
-	return val;
-
+	return val;//Node v0.10.*
 }
 
 //List of possible specifiers with transformation and validation
@@ -124,8 +126,8 @@ var specifiers = {
 	},
 	F: {
 		transform: function(a, b) { return a.toFixed(b); },
-		allowSign: true,
-		type: types.number
+		allowSign:	true,
+		type:		types.number
 	},
 	e: {
 		transform: function(a, b) { return a.toExponential(b); },
@@ -148,7 +150,7 @@ var specifiers = {
 	},
 	a: {
 		transform: function(a, b) {
-			return precBase(16, a, b) + 'p0';
+			return precBase(16, a, b, true) + 'p0';
 		},
 		allowSign: true,
 		prefix: '0x',
@@ -172,7 +174,7 @@ var specifiers = {
 		type: types.string
 	},
 	b: {
-		transform: function(a, b) { return precBase(2, a, b); },
+		transform: function(a, b) { return precBase(2, a, b, true); },
 		type: types.number
 	},
 	j: {
@@ -184,8 +186,8 @@ var specifiers = {
 //Alias
 specifiers.i = specifiers.d;
 
-//The regex used for matching flags
-var reg = /%(?:(\d+)\$|\((\w+)\))?([+#-]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*))?([bdiuoxXfFeEgGaAcsj%])/g;
+//The regex used for matching flags, note that at the moment this also includes \w to catch bad identifiers
+var reg = /%(?:(\d+)\$|\((\w+)\))?([+# -]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*))?([bdiuoxXfFeEgGaAcsj%\w])/g;
 
 /**
  * Formats arguments according to the given format string.
@@ -234,7 +236,7 @@ function esprintf(formatString) {
 			}
 		} else {
 			if (assocReference) {
-				throw new SyntaxError('Cannot use associative parameters mixed with non associative');
+				throw new SyntaxError('Cannot use associative parameters mixed with non associative using json');
 			}
 			value = parentArguments[reference];
 		}
@@ -250,7 +252,6 @@ function esprintf(formatString) {
 			width = parseInt(width);
 		}
 
-		precision = parseInt(precision) || 6;
 		if (precision === '*') {
 			precision = parentArguments[++reference];
 			valueIdx++;
@@ -260,6 +261,14 @@ function esprintf(formatString) {
 		}
 
 		var specifier = specifiers[type];
+
+		if(precision === undefined) {
+			precision = 6;
+		}
+		precision = parseInt(precision);
+
+
+
 		if (!specifier) {
 			throw new Error('Unsupport identified \'' + type + '\'');
 		}
@@ -280,9 +289,7 @@ function esprintf(formatString) {
 
 		var fullPrefix = (forcePrecisionOrPrefix ? prefix : '') +
 		(
-			(forceSign && allowSign && value > 0) ? '+' : (
-				(value < 0) ? '-' : (blankFill ? ' ' : '')
-			)
+			(forceSign && allowSign && value > 0) ? '+' : (blankFill ? ' ' : '')
 		);
 
 		if (width !== undefined && width === width) {//width might be NaN
