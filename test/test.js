@@ -5,8 +5,82 @@ var assert = require('assert');
 
 /* global describe, it */
 
+function testErrorMessage(regex) {
+	return function(error) {
+		return regex.test(error.message);
+	};
+}
 
 describe('esprintf', function() {
+
+	describe('general', function() {
+		it('Trims a string if the set length is less than the string length', function() {
+			assert.equal(esprintf('%3s', 'abcdef'), 'abc');
+		});
+
+		it('Trims a string if the set length is less than the string length', function() {
+			assert.equal(esprintf('%-3s', 'abcdef'), 'abc');
+		});
+
+		it('Throws when mixing assoc with non assoc formatting', function() {
+			assert.throws(
+				function() {
+					esprintf('%s %(test)d', {
+						test: 1
+					});
+				},
+				testErrorMessage(/Cannot use associative parameters mixed with non associative/)
+			);
+		});
+
+		it('Throws when no parameter for dynamic width is set', function() {
+			assert.throws(
+				function() {
+					esprintf('%*s', 'test');
+				},
+				testErrorMessage(/No value for dynamic width for parameter no/)
+			);
+		});
+
+		it('Throws when no parameter for dynamic precision is set', function() {
+			assert.throws(
+				function() {
+					esprintf('%.*d', 21);
+				},
+				testErrorMessage(/No value for dynamic precision for parameter no/)
+			);
+		});
+
+		it('Throws when no parameter is available', function() {
+			assert.throws(
+				function() {
+					esprintf('%s');
+				},
+				testErrorMessage(/No value for format parameter no/)
+			);
+		});
+
+		it('Throws when getting a string where the param should be a number', function() {
+			assert.throws(
+				function() {
+					esprintf('%d', 'u wot m8');
+				},
+				testErrorMessage(/Invalid value for format parameter no/)
+			);
+		});
+
+		it('Does not trim or padd a value with the correct length', function() {
+			assert.equal(esprintf('%4s', 'test'), 'test');
+		});
+	});
+
+	describe('%%', function() {
+		it('Replaces %% with %', function() {
+			assert.equal(esprintf('%%'), '%');
+		});
+	});
+
+
 	describe('%s', function() {
 		it('Does not delete dashes from the formatted string', function() {
 			assert.equal(esprintf('%s', '-'), '-');
@@ -32,7 +106,7 @@ describe('esprintf', function() {
 		});
 	});
 
-	describe('%i', function() {
+	describe('%i/%d', function() {
 		it('Correctly formats a single integer', function() {
 			assert.equal(esprintf('%i', 123456), '123456');
 		});
@@ -51,6 +125,18 @@ describe('esprintf', function() {
 
 		it('Correctly rounds to an integer value', function() {
 			assert.equal(esprintf('%i', 3.1415), '3');
+		});
+
+		it('Correctly formats negative numbers', function() {
+			assert.equal(esprintf('%i', -123456), '-123456');
+		});
+
+		it('Correctly formats forced prefix number with +', function() {
+			assert.equal(esprintf('%+i', 123456), '+123456');
+		});
+
+		it('Correctly adds a whitespace when blank prefix is precified', function() {
+			assert.equal(esprintf('% i %i', 123456, -123456), ' 123456 -123456');
 		});
 	});
 
@@ -84,11 +170,19 @@ describe('esprintf', function() {
 		});
 
 		it('Correctly padds a single float with zeros', function() {
-			assert.equal(esprintf('%09f', 123456), paddLeft((123456).toLocaleString(undefined, {minimumSignificantDigits: 12}), 9, '0'));
+			assert.equal(esprintf('%09f', 123456), paddLeft((123456).toLocaleString(undefined, {minimumSignificantDigits: 12}) + '.000000', 9, '0'));
 		});
 
 		it('Correctly padds a single float with zeros and a floating point length of 2', function() {
 			assert.equal(esprintf('%010.2f', 123456.12), paddLeft((123456.12).toLocaleString(), 10, '0'));
+		});
+
+		it('Has no floating point if precision is 0', function() {
+			assert.equal(esprintf('%010.0f', 123456), paddLeft((123456).toLocaleString(), 10, '0'));
+		});
+
+		it('Corretly formats a number with dynamic precision', function() {
+			assert.equal(esprintf('%.*f', 123.1234, 3), (123.123).toLocaleString());
 		});
 	});
 
@@ -105,6 +199,15 @@ describe('esprintf', function() {
 	describe('%c', function() {
 		it('Single value', function() {
 			assert.equal(esprintf('%c', 'a'.charCodeAt(0)), 'a');
+		});
+
+		it('Throws if argument is not a number', function() {
+			assert.throws(
+				function() {
+					esprintf('%c', 'a');
+				},
+				testErrorMessage(/Argument for %c must be a number/)
+			);
 		});
 	});
 
@@ -187,6 +290,39 @@ describe('esprintf', function() {
 					test:'wuff'
 				}),
 				'wuff wuff'
+			);
+		});
+
+		it('Throws when the assoc parameter is not set', function() {
+			assert.throws(
+				function() {
+					esprintf('%(test)s', {
+						test2: 1
+					});
+				},
+				testErrorMessage(/No value for format parameter/)
+			);
+		});
+
+		it('Throws when the assoc parameter with json', function() {
+			assert.throws(
+				function() {
+					esprintf('%(test)j', {
+						test: {
+							wot: 1
+						}
+					});
+				},
+				testErrorMessage(/Cannot use associative parameters mixed with non associative using json/)
+			);
+		});
+
+		it('Throws when the identifier is unknown', function() {
+			assert.throws(
+				function() {
+					esprintf('%k', 1);
+				},
+				testErrorMessage(/Unsupport identified/)
 			);
 		});
 	});
