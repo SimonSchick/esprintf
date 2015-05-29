@@ -68,18 +68,18 @@ var types = {
 function precBase(base, value, precision, onlyIfPrecision) {
 	var val = value.toString(base);
 	var floatingPoint = val.indexOf('.');
-	if(precision === 0 && floatingPoint > -1) {
+	if (precision === 0 && floatingPoint > -1) {
 		return val.substring(0, floatingPoint);//Node version > 0.10.*
 	}
-	if(floatingPoint === -1) {
-		if(precision > 0 && !onlyIfPrecision) {
+	if (floatingPoint === -1) {
+		if (precision > 0 && !onlyIfPrecision) {
 			return val + '.' + repeat('0', precision);//Node v0.10.*
 		}
 		return val;
 	}
-	if(val.length - floatingPoint > precision) {
+	if (val.length - floatingPoint > precision) {
 		return val.substring(0, floatingPoint + precision + 1);
-	} else if(val.length - floatingPoint < precision) {
+	} else if (val.length - floatingPoint < precision) {
 		return val + repeat('0', precision - (val.length - floatingPoint) + 1);//Node v0.10.*
 	}
 	return val;//Node v0.10.*
@@ -262,7 +262,7 @@ function esprintf(formatString) {
 
 		var specifier = specifiers[type];
 
-		if(precision === undefined) {
+		if (precision === undefined) {
 			precision = 6;
 		}
 		precision = parseInt(precision);
