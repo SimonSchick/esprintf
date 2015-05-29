@@ -24,6 +24,7 @@
     "gulp-jscs": "^1.4.0",
     "gulp-jshint": "^1.9.4",
     "gulp-load-plugins": "~0.10.0",
+    "istanbul": "^0.3.14",
     "jshint-stylish": "^1.0.1",
     "mocha": "^2.2.5",
     "q": "~1.4.1"
