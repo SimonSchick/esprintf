@@ -88,27 +88,37 @@ function precBase(base, value, precision, onlyIfPrecision) {
 //List of possible specifiers with transformation and validation
 var specifiers = {
 	d: {
-		transform: function(a) { return a | 0; },
+		transform: function(a) {
+			return a | 0;
+		},
 		allowSign: true,
 		type: types.number
 	},
 	u: {
-		transform: function(a) { return a >>> 0; },
+		transform: function(a) {
+			return a >>> 0;
+		},
 		allowSign: true,
 		type: types.number
 	},
 	o: {
-		transform: function(a) { return a.toString(8); },
+		transform: function(a) {
+			return a.toString(8);
+		},
 		prefix: '0',
 		type: types.number
 	},
 	x: {
-		transform: function(a) { return Math.floor(a).toString(16); },
+		transform: function(a) {
+			return Math.floor(a).toString(16);
+		},
 		prefix: '0x',
 		type: types.number
 	},
 	X: {
-		transform: function(a) { return specifiers.x.transform(a).toUpperCase(); },
+		transform: function(a) {
+			return specifiers.x.transform(a).toUpperCase();
+		},
 		prefix: '0X',
 		type: types.number
 	},
@@ -125,26 +135,36 @@ var specifiers = {
 		type: types.number
 	},
 	F: {
-		transform: function(a, b) { return a.toFixed(b); },
+		transform: function(a, b) {
+			return a.toFixed(b);
+		},
 		allowSign:	true,
 		type:		types.number
 	},
 	e: {
-		transform: function(a, b) { return a.toExponential(b); },
+		transform: function(a, b) {
+			return a.toExponential(b);
+		},
 		allowSign: true
 	},
 	E: {
-		transform: function(a, b) { return specifiers.e.transform(a, b).toUpperCase(); },
+		transform: function(a, b) {
+			return specifiers.e.transform(a, b).toUpperCase();
+		},
 		allowSign: true,
 		type: types.number
 	},
 	g: {
-		transform: function(a, b) { return a.toPrecision(b); },
+		transform: function(a, b) {
+			return a.toPrecision(b);
+		},
 		allowSign: true,
 		type: types.number
 	},
 	G: {
-		transform: function(a, b) { return a.toPrecision(b).toUpperCase(); },
+		transform: function(a, b) {
+			return a.toPrecision(b).toUpperCase();
+		},
 		allowSign: true,
 		type: types.number
 	},
@@ -157,7 +177,9 @@ var specifiers = {
 		type: types.number
 	},
 	A: {
-		transform: function(a, b) { return specifiers.a.transform(a, b).toUpperCase(); },
+		transform: function(a, b) {
+			return specifiers.a.transform(a, b).toUpperCase();
+		},
 		allowSign: true,
 		prefix: '0X',
 		type: types.number
@@ -174,7 +196,9 @@ var specifiers = {
 		type: types.string
 	},
 	b: {
-		transform: function(a, b) { return precBase(2, a, b, true); },
+		transform: function(a, b) {
+			return precBase(2, a, b, true);
+		},
 		type: types.number
 	},
 	j: {
