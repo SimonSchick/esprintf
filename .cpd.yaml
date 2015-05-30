@@ -3,5 +3,7 @@ languages:
 exclude:
   - "**/node_modules/**"
   - "**/*.min.js"
+  - "**/coverage/**"
+  - "**/docs/**"
 min-tokens: 60
 min-lines: 10

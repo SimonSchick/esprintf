@@ -1,2 +1,7 @@
 /node_modules/
 /logs/
+/coverage/
+/docs/
+*.log
+complexityreport.md
+*.*~

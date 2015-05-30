@@ -2,7 +2,7 @@
 	"filepattern": "\\.js$",
 	"output": "complexityreport.md",
 	"format": "markdown",
-	"excludepattern": "node_modules|docs",
+	"excludepattern": "node_modules|docs|coverage|docs",
 	"dirpattern": "./",
 	"silent": false,
 	"logicalor": false,

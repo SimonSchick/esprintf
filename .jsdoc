@@ -8,7 +8,7 @@
 	"source": {
 		"include":			["./"],
 		"includePattern":	".+\\.js(doc)?$",
-		"excludePattern":	"node_modules"
+		"excludePattern":	"node_modules|coverage|logs"
 	},
 
 	"opts": {
