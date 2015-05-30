@@ -6,14 +6,32 @@ var spawn = require('child_process').spawn;
 var Q = require('q');
 
 function validateFiles(files) {
-	return gulp.src(files)
-	.pipe($.jshint())
-	.pipe($.jshint.reporter(require('jshint-stylish')))
-	.pipe($.jshint.reporter('fail'))
-	.pipe($.jscs());
+	return Q.Promise(function(resolve, reject) {
+		gulp.src(files)
+		.pipe($.jshint())
+		.pipe($.jshint.reporter(require('jshint-stylish')))
+		.pipe($.jshint.reporter('fail'))
+		.pipe($.jscs())
+		.pipe($.filter(['*', '!test/*']))
+		.pipe($.istanbul()) // Covering files
+		.pipe($.istanbul.hookRequire()) // Force `require` to return covered files
+		.on('finish', function () {
+			gulp.src(['test/*.js'])
+			.pipe($.mocha())
+			.pipe($.istanbul.writeReports()) // Creating the reports after tests runned
+			.pipe($.istanbul.enforceThresholds({
+				thresholds: {
+					global: 90
+				}
+			})) // Enforce a coverage of at least 90%
+			.on('end', resolve)
+			.on('error', reject);
+		})
+		.on('error', reject);
+	});
 }
 
-gulp.task('git-pre-commit', function(done) {
+gulp.task('git-pre-commit', function() {
 	var process = spawn('git', ['diff', '--name-only', '--staged', '--', '*.js']);
 
 	var buffer = new Buffer(0);
@@ -38,10 +56,11 @@ gulp.task('git-pre-commit', function(done) {
 	});
 });
 
-gulp.task('validate', function() {
+gulp.task('validate', function(cb) {
 	return validateFiles([
 		'**/*.js',
 		'!node_modules/**/*',
-		'!docs/**/*'
+		'!docs/**/*',
+		'!coverage/**/'
 	]);
 });
