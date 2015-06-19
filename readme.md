@@ -3,9 +3,9 @@
 [![NPM](https://nodei.co/npm/esprintf.png)](https://nodei.co/npm/esprintf/)
 
 [![Build Status](https://travis-ci.org/SimonSchick/esprintf.svg?branch=master)](https://travis-ci.org/SimonSchick/esprintf)
-[![Dependencies](https://david-dm.org/SimonSchick/esprintf.svg)](https://david-dm.org/SimonSchick/argument-parser)
+[![Dependencies](https://david-dm.org/SimonSchick/esprintf.svg)](https://david-dm.org/SimonSchick/esprintf)
 [![Coverage Status](https://coveralls.io/repos/SimonSchick/esprintf/badge.svg)](https://coveralls.io/r/SimonSchick/esprintf)
-[![npm version](http://img.shields.io/npm/v/esprintf.svg)](https://npmjs.org/package/%NAME%)
+[![npm version](http://img.shields.io/npm/v/esprintf.svg)](https://npmjs.org/package/esprintf)
 
 
 ## Requirements & Installation
