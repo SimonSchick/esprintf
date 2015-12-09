@@ -10,6 +10,7 @@ test
 .jscs
 .jscsrc
 .jsdoc
+.jshintrc
 .jshintignore
 .travis.yml
 gulpfile.js
