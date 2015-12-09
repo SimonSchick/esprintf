@@ -10,7 +10,7 @@
 
 ## Requirements & Installation
 
-Just run npm install esprintf
+Just run ```npm install esprintf```
 
 ## Usage
 
