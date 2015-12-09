@@ -1,0 +1,16 @@
+logs
+coverage
+docs
+test
+*.*~
+*.log
+.complexrc
+.cpd.yaml
+.editorconfig
+.jscs
+.jscsrc
+.jsdoc
+.jshintignore
+.travis.yml
+gulpfile.js
+complexityreport.md
