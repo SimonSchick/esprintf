@@ -287,7 +287,7 @@ function esprintf(formatString) {
 		var specifier = specifiers[type];
 
 		if (!specifier) {
-			throw new Error('Unsupport identified \'' + type + '\'');
+			throw new SyntaxError('Unsupport identified \'' + type + '\'');
 		}
 
 		if (value === undefined) {
@@ -299,7 +299,7 @@ function esprintf(formatString) {
 		}
 		precision = parseInt(precision);
 
-		if(isNaN(precision)) {
+		if (isNaN(precision)) {
 			throw new TypeError('Bad precision value for format parameter no. ' + reference - 1);
 		}
 
