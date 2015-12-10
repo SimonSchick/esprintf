@@ -286,19 +286,21 @@ function esprintf(formatString) {
 
 		var specifier = specifiers[type];
 
-		if (precision === undefined) {
-			precision = 6;
-		}
-		precision = parseInt(precision);
-
-
-
 		if (!specifier) {
 			throw new Error('Unsupport identified \'' + type + '\'');
 		}
 
 		if (value === undefined) {
 			throw new Error('No value for format parameter no. ' + (reference - 1));
+		}
+
+		if (precision === undefined) {
+			precision = 6;
+		}
+		precision = parseInt(precision);
+
+		if(isNaN(precision)) {
+			throw new TypeError('Bad precision value for format parameter no. ' + reference - 1);
 		}
 
 		if (specifier.type === types.number && !parseInt(value)) {
