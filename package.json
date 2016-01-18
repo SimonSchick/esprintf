@@ -1,6 +1,6 @@
 {
   "name": "esprintf",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Enhanced sprintf implementation with lots of extras",
   "main": "index.js",
   "scripts": {
