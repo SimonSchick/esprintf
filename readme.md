@@ -61,6 +61,6 @@ Will result in:
 
 ````
 {
-	"hello": "world"
+	"hello":	"world"
 }
 ````
