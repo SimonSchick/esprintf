@@ -4,14 +4,7 @@ docs
 test
 *.*~
 *.log
-.complexrc
-.cpd.yaml
 .editorconfig
-.jscs
-.jscsrc
-.jsdoc
-.jshintrc
-.jshintignore
 .travis.yml
 gulpfile.js
 complexityreport.md

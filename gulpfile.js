@@ -1,12 +1,11 @@
 'use strict';
 
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')();
-var Q = require('q');
-
+const gulp = require('gulp');
+const $ = require('gulp-load-plugins')();
+const Q = require('q');
 
 function promisifyStream(stream) {
-	return new Q.Promise(function(resolve, reject) {
+	return new Q.Promise((resolve, reject) => {
 		stream
 		.on('finish', resolve)
 		.on('error', reject);
@@ -20,15 +19,7 @@ function coveralls() {
 	);
 }
 
-function testAndCoverage(lcovOnly) {
-	var reportOptions;
-
-	if (lcovOnly) {
-		reportOptions = {
-			reporters: ['lcov', 'text', 'text-summary']
-		};
-	}
-
+function testAndCoverage() {
 	return promisifyStream(
 		gulp.src(['test/*.js'])
 		.pipe($.mocha())
@@ -44,35 +35,30 @@ function testAndCoverage(lcovOnly) {
 function validateFiles(files, lcovOnly) {
 	return promisifyStream(
 		gulp.src(files)
-		.pipe($.jshint())
-		.pipe($.jshint.reporter(require('jshint-stylish')))
-		.pipe($.jshint.reporter('fail'))
-		.pipe($.jscs())
+		.pipe($.eslint())
+		.pipe($.eslint.format())
+		.pipe($.eslint.failAfterError())
 		.pipe($.filter(['*', '!test/*']))
 		.pipe($.istanbul())
 		.pipe($.istanbul.hookRequire())
 	)
-	.then(function() {
-		return testAndCoverage(lcovOnly);
-	});
+	.then(() => testAndCoverage(lcovOnly));
 }
 
-var files = [
+const files = [
 	'**/*.js',
 	'!node_modules/**/*',
 	'!docs/**/*',
 	'!coverage/**/'
 ];
 
-gulp.task('default', function() {
+gulp.task('default', () => {
 	if (process.env.TRAVIS) {
 		return validateFiles(files, true);
 	}
 	return validateFiles(files);
 });
 
-gulp.task('coveralls', function() {
-	return coveralls();
-});
+gulp.task('coveralls', coveralls);
 
 gulp.task('git-pre-commit', ['default']);

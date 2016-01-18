@@ -53,7 +53,7 @@ function contains(str, what) {
 	return str.indexOf(what) !== -1;
 }
 
-var types = {
+const types = {
 	number: 0,
 	string: 1
 };
@@ -65,127 +65,95 @@ var types = {
  * @param  {number} precision
  * @return {string}
  */
-function precBase(base, value, precision, onlyIfPrecision) {
-	var val = value.toString(base);
-	var floatingPoint = val.indexOf('.');
+function precBase(base, value, precision) {
+	const val = value.toString(base);
+	const floatingPoint = val.indexOf('.');
 	if (precision === 0 && floatingPoint > -1) {
 		return val.substring(0, floatingPoint);//Node version > 0.10.*
 	}
 	if (floatingPoint === -1) {
-		if (precision > 0 && !onlyIfPrecision) {
-			return val + '.' + repeat('0', precision);//Node v0.10.*
-		}
 		return val;
 	}
 	if (val.length - floatingPoint > precision) {
 		return val.substring(0, floatingPoint + precision + 1);
-	} else if (val.length - floatingPoint < precision) {
-		return val + repeat('0', precision - (val.length - floatingPoint) + 1);//Node v0.10.*
 	}
-	return val;//Node v0.10.*
 }
 
 //List of possible specifiers with transformation and validation
-var specifiers = {
+const specifiers = {
 	d: {
-		transform: function(a) {
-			return a | 0;
-		},
+		transform: a => a | 0,
 		allowSign: true,
 		type: types.number
 	},
 	u: {
-		transform: function(a) {
-			return a >>> 0;
-		},
+		transform: a => a >>> 0,
 		allowSign: true,
 		type: types.number
 	},
 	o: {
-		transform: function(a) {
-			return a.toString(8);
-		},
+		transform: a => a.toString(8),
 		prefix: '0',
 		type: types.number
 	},
 	x: {
-		transform: function(a) {
-			return Math.floor(a).toString(16);
-		},
+		transform: a => Math.floor(a).toString(16),
 		prefix: '0x',
 		type: types.number
 	},
 	X: {
-		transform: function(a) {
-			return specifiers.x.transform(a).toUpperCase();
-		},
+		transform: a => specifiers.x.transform(a).toUpperCase(),
 		prefix: '0X',
 		type: types.number
 	},
 	f: {
-		transform: function(a, b) {
-			return precBase(10, a.toLocaleString(
-				undefined,
-				{
-					minimumSignificantDigits: 21
-				}
-			), b);
-		},
+		transform: (a, b) => precBase(10, a.toLocaleString(
+			undefined,
+			{
+				minimumSignificantDigits: 21
+			}
+		), b),
 		allowSign: true,
 		type: types.number
 	},
 	F: {
-		transform: function(a, b) {
-			return a.toFixed(b);
-		},
-		allowSign:	true,
-		type:		types.number
+		transform: (a, b) => a.toFixed(b),
+		allowSign: true,
+		type: types.number
 	},
 	e: {
-		transform: function(a, b) {
-			return a.toExponential(b);
-		},
+		transform: (a, b) => a.toExponential(b),
 		allowSign: true
 	},
 	E: {
-		transform: function(a, b) {
-			return specifiers.e.transform(a, b).toUpperCase();
-		},
+		transform: (a, b) => specifiers.e.transform(a, b).toUpperCase(),
 		allowSign: true,
 		type: types.number
 	},
 	g: {
-		transform: function(a, b) {
-			return a.toPrecision(b);
-		},
+		transform: (a, b) => a.toPrecision(b),
 		allowSign: true,
 		type: types.number
 	},
 	G: {
-		transform: function(a, b) {
-			return a.toPrecision(b).toUpperCase();
-		},
+		transform: (a, b) => a.toPrecision(b).toUpperCase(),
 		allowSign: true,
 		type: types.number
 	},
 	a: {
-		transform: function(a, b) {
-			return precBase(16, a, b, true) + 'p0';
-		},
+		transform: (a, b) => precBase(16, a, b, true) + 'p0',
 		allowSign: true,
 		prefix: '0x',
 		type: types.number
 	},
 	A: {
-		transform: function(a, b) {
-			return specifiers.a.transform(a, b).toUpperCase();
-		},
+		transform: (a, b) => specifiers.a.transform(a, b).toUpperCase(),
 		allowSign: true,
 		prefix: '0X',
 		type: types.number
 	},
 	c: {
-		transform: function(a, b) {
+		transform: a => {
 			if (typeof a !== 'number') {
 				throw new TypeError('Argument for %c must be a number');
 			}
@@ -196,22 +164,18 @@ var specifiers = {
 		type: types.string
 	},
 	b: {
-		transform: function(a, b) {
-			return precBase(2, a, b, true);
-		},
+		transform: (a, b) => precBase(2, a, b, true),
 		type: types.number
 	},
 	j: {
-		transform: function(a, b, customPadding) {
-			return JSON.stringify(a, null, customPadding);
-		}
+		transform: (a, b, customPadding) => JSON.stringify(a, null, customPadding)
 	}
 };
 //Alias
 specifiers.i = specifiers.d;
 
 //The regex used for matching flags, note that at the moment this also includes \w to catch bad identifiers
-var reg = /%(?:(\d+)\$|\((\w+)\))?([+# -]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*))?([bdiuoxXfFeEgGaAcsj%\w])/g;
+const reg = /%(?:(\d+)\$|\((\w+)\))?([+# -]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*))?([bdiuoxXfFeEgGaAcsj%\w])/g;
 
 /**
  * Formats arguments according to the given format string.
@@ -222,12 +186,11 @@ var reg = /%(?:(\d+)\$|\((\w+)\))?([+# -]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*))?
  * @return {string}
  */
 function esprintf(formatString) {
-	var valueIdx = 0;
-	var parentArguments = arguments;
-	var isAssoc = arguments[1] instanceof Object;
+	let valueIdx = 0;
+	const parentArguments = arguments;
+	const isAssoc = arguments[1] instanceof Object;
 	// jshint maxparams:10
-	return formatString.replace(reg,
-		function(wholeMatch, reference, assocReference, flags, zeroPadding, customPadding, width, precision, type) {
+	return formatString.replace(reg, (wholeMatch, reference, assocReference, flags, zeroPadding, customPadding, width, precision, type) => { //eslint-disable-line
 		// jshint maxparams: 4
 		if (type === '%') {
 			return '%';
@@ -235,22 +198,22 @@ function esprintf(formatString) {
 
 		valueIdx++;
 
-		reference = parseInt(reference) || valueIdx;
+		reference = parseInt(reference, 10) || valueIdx;
 
 		flags = flags || '';
 
-		var leftJustify = contains(flags, '-');
-		var forceSign = contains(flags, '+');
-		var blankFill = contains(flags, ' ');
-		var forcePrecisionOrPrefix = contains(flags, '#');
+		const leftJustify = contains(flags, '-');
+		const forceSign = contains(flags, '+');
+		const blankFill = contains(flags, ' ');
+		const forcePrecisionOrPrefix = contains(flags, '#');
 
 		customPadding = customPadding || zeroPadding;
 
-		var padding = customPadding || ' ';
+		const padding = customPadding || ' ';
 
-		var value;
+		let value;
 
-		if (isAssoc && type !== 'j') {//special handling of JSON :/
+		if (isAssoc && type !== 'j') { //special handling of JSON :/
 			if (!assocReference) {
 				throw new SyntaxError('Cannot use associative parameters mixed with non associative');
 			}
@@ -273,7 +236,7 @@ function esprintf(formatString) {
 				throw new Error('No value for dynamic width for parameter no. ' + (reference - 2));
 			}
 		} else {
-			width = parseInt(width);
+			width = parseInt(width, 10);
 		}
 
 		if (precision === '*') {
@@ -284,7 +247,7 @@ function esprintf(formatString) {
 			}
 		}
 
-		var specifier = specifiers[type];
+		const specifier = specifiers[type];
 
 		if (!specifier) {
 			throw new SyntaxError('Unsupport identified \'' + type + '\'');
@@ -297,29 +260,31 @@ function esprintf(formatString) {
 		if (precision === undefined) {
 			precision = 6;
 		}
-		precision = parseInt(precision);
+		precision = parseInt(precision, 10);
 
 		if (isNaN(precision)) {
 			throw new TypeError('Bad precision value for format parameter no. ' + reference - 1);
 		}
 
-		if (specifier.type === types.number && !parseInt(value)) {
-			throw new TypeError('Invalid value for format parameter no. ' + (reference - 1) + ' expected number, got string');
+		if (specifier.type === types.number && !parseInt(value, 10)) {
+			throw new TypeError(
+				'Invalid value for format parameter no. ' + (reference - 1) + ' expected number, got string'
+			);
 		}
-		var ret = specifier.transform ? specifier.transform(value, precision, customPadding) : value;
+		let ret = specifier.transform ? specifier.transform(value, precision, customPadding) : value;
 
-		var allowSign = specifier.allowSign;
-		var prefix = specifier.prefix;
+		const allowSign = specifier.allowSign;
+		const prefix = specifier.prefix;
 
 		ret = ret.toString();
 
-		var fullPrefix = (forcePrecisionOrPrefix ? prefix : '') +
+		const fullPrefix = (forcePrecisionOrPrefix ? prefix : '') +
 		(
-			(forceSign && allowSign && value > 0) ? '+' : (blankFill ? ' ' : '')
+			(forceSign && allowSign && value > 0) ? '+' : (blankFill ? ' ' : '') //eslint-disable-line
 		);
 
-		if (width !== undefined && width === width) {//width might be NaN
-			var method = leftJustify ? paddRight : paddLeft;
+		if (width !== undefined && !isNaN(width)) { //width might be NaN
+			const method = leftJustify ? paddRight : paddLeft;
 
 			if (padding === '0') {
 				return fullPrefix + method(ret, width, '0');
