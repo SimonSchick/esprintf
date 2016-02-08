@@ -192,7 +192,7 @@ function esprintf(formatString) {
 
 		if (isAssoc && type !== 'j') { //special handling of JSON :/
 			if (!assocReference) {
-				throw new SyntaxError('Cannot use associative parameters mixed with non associative');
+				throw new Error('Cannot use associative parameters mixed with non associative');
 			}
 			value = parentArguments[1][assocReference];
 			if (value === undefined) {
