@@ -5,10 +5,6 @@ const assert = require('assert');
 
 /* global describe, it */
 
-function testErrorMessage(regex) {
-	return error => regex.test(error.message);
-}
-
 /* eslint-disable max-nested-callbacks */
 
 describe('esprintf', () => {
@@ -29,7 +25,7 @@ describe('esprintf', () => {
 						test: 1
 					});
 				},
-				testErrorMessage(/Cannot use associative parameters mixed with non associative/)
+				/Cannot use associative parameters mixed with non associative/
 			);
 		});
 
@@ -38,7 +34,7 @@ describe('esprintf', () => {
 				() => {
 					esprintf('%*s', 'test');
 				},
-				testErrorMessage(/No value for dynamic width for parameter no/)
+				/No value for dynamic width for parameter no/
 			);
 		});
 
@@ -47,7 +43,7 @@ describe('esprintf', () => {
 				() => {
 					esprintf('%.*d', 21);
 				},
-				testErrorMessage(/No value for dynamic precision for parameter no/)
+				/No value for dynamic precision for parameter no/
 			);
 		});
 
@@ -56,7 +52,7 @@ describe('esprintf', () => {
 				() => {
 					esprintf('%s');
 				},
-				testErrorMessage(/No value for format parameter no/)
+				/No value for format parameter no/
 			);
 		});
 
@@ -65,7 +61,7 @@ describe('esprintf', () => {
 				() => {
 					esprintf('%d', 'u wot m8');
 				},
-				testErrorMessage(/Invalid value for format parameter no/)
+				/Invalid value for format parameter no/
 			);
 		});
 
@@ -213,7 +209,7 @@ describe('esprintf', () => {
 				() => {
 					esprintf('%c', 'a');
 				},
-				testErrorMessage(/Argument for %c must be a number/)
+				/Argument for %c must be a number/
 			);
 		});
 	});
@@ -307,7 +303,7 @@ describe('esprintf', () => {
 						test2: 1
 					});
 				},
-				testErrorMessage(/No value for format parameter/)
+				/No value for format parameter/
 			);
 		});
 
@@ -320,7 +316,7 @@ describe('esprintf', () => {
 						}
 					});
 				},
-				testErrorMessage(/Cannot use associative parameters mixed with non associative using json/)
+				/Cannot use associative parameters mixed with non associative using json/
 			);
 		});
 
@@ -329,7 +325,7 @@ describe('esprintf', () => {
 				() => {
 					esprintf('%k', 1);
 				},
-				testErrorMessage(/Unsupport identified/)
+				/Unsupport identified/
 			);
 		});
 	});
