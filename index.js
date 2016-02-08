@@ -1,19 +1,6 @@
 'use strict';
 
 /**
- * Repeats a string num times.
- * @param  {string} str
- * @param  {number} num
- * @return {string}
- */
-function repeat(str, num) {
-	if (num < 0) {
-		return '';
-	}
-	return new Array(num + 1).join(str);
-}
-
-/**
  * Padds or truncates a string left.
  * @param  {string} str    The string to be modified
  * @param  {number} length Length of the final string
@@ -25,7 +12,7 @@ function paddLeft(str, length, what) {
 		return str.substring(0, length);
 	}
 	what = what || ' ';
-	return repeat(what, length - str.length) + str;
+	return what.repeat(length - str.length) + str;
 }
 
 /**
@@ -40,17 +27,7 @@ function paddRight(str, length, what) {
 		return str.substring(0, length);
 	}
 	what = what || ' ';
-	return str + repeat(what, length - str.length);
-}
-
-/**
- * Utility function to check if a string is included in a string
- * @param  {string} str
- * @param  {string} what
- * @return {boolean}
- */
-function contains(str, what) {
-	return str.indexOf(what) !== -1;
+	return str + what.repeat(length - str.length);
 }
 
 const types = {
@@ -202,10 +179,10 @@ function esprintf(formatString) {
 
 		flags = flags || '';
 
-		const leftJustify = contains(flags, '-');
-		const forceSign = contains(flags, '+');
-		const blankFill = contains(flags, ' ');
-		const forcePrecisionOrPrefix = contains(flags, '#');
+		const leftJustify = flags.includes('-');
+		const forceSign = flags.includes('+');
+		const blankFill = flags.includes(' ');
+		const forcePrecisionOrPrefix = flags.includes('#');
 
 		customPadding = customPadding || zeroPadding;
 
