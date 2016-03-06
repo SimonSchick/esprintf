@@ -163,6 +163,9 @@ const reg = /%(?:(\d+)\$|\((\w+)\))?([+# -]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*)
  * @return {string}
  */
 function esprintf(formatString) {
+	if (formatString instanceof Array) {
+		formatString = String.raw(formatString);
+	}
 	let valueIdx = 0;
 	const parentArguments = arguments;
 	const isAssoc = arguments[1] instanceof Object;

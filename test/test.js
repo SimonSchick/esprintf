@@ -330,6 +330,12 @@ describe('esprintf', () => {
 		});
 	});
 
+	describe('template strings', () => {
+		it('supports them', () => {
+			assert.equal(esprintf`%.2${42.4242}f`, '42.42');
+		});
+	});
+
 	describe('madness', () => {
 		it('Is probably not a valid usecase', () => {
 			assert.equal(
