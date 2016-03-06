@@ -51,16 +51,27 @@ JSON formatting special:
 
 I added JSON formatting for convenience reasons(because I could), in order to use prettyfied json you need to pass the padding specifier eg.
 
-````
+```javascript
 console.log(esprintf('%\'\tj', {
 	hello: 'world'
 }));
-````
+```
 
 Will result in:
 
-````
+```json
 {
 	"hello":	"world"
 }
-````
+```
+
+It also supports template strings:
+
+```javascript
+esprintf`%.2${42.4242}f`;
+```
+
+Will result in:
+
+`42.42`
+
