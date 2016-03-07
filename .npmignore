@@ -9,3 +9,5 @@ test
 gulpfile.js
 complexityreport.md
 .eslintrc
+*.sublime-project
+*.sublime-workspace
