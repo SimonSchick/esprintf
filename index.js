@@ -2,10 +2,10 @@
 
 /**
  * Padds or truncates a string left.
- * @param  {string} str    The string to be modified
- * @param  {number} length Length of the final string
- * @param  {string} what   The padding string(should be one character)
- * @return {string}
+ * @param  {String} str    The string to be modified
+ * @param  {Number} length Length of the final string
+ * @param  {String} what   The padding string(should be one character)
+ * @return {String}
  */
 function paddLeft(str, length, what) {
 	if (length <= str.length) {
@@ -17,10 +17,10 @@ function paddLeft(str, length, what) {
 
 /**
  * Padds or truncates a string right.
- * @param  {string} str    The string to be modified
- * @param  {number} length Length of the final string
- * @param  {string} what   The padding string(should be one character)
- * @return {string}
+ * @param  {String} str    The string to be modified
+ * @param  {Number} length Length of the final string
+ * @param  {String} what   The padding string(should be one character)
+ * @return {String}
  */
 function paddRight(str, length, what) {
 	if (length <= str.length) {
@@ -37,10 +37,10 @@ const types = {
 
 /**
  * Converts the given value to the new numeric base and truncates the precision to the given value.
- * @param  {number} base Should follow the restrictions of Number.prototype.toString()
- * @param  {number} value
- * @param  {number} precision
- * @return {string}
+ * @param  {Number} base Should follow the restrictions of Number.prototype.toString()
+ * @param  {Number} value
+ * @param  {Number} precision
+ * @return {String}
  */
 function precBase(base, value, precision) {
 	const val = value.toString(base);
@@ -157,10 +157,10 @@ const reg = /%(?:(\d+)\$|\((\w+)\))?([+# -]*)('(.)|0)?((?:\d|\*)+)?(?:\.([\d*]*)
 /**
  * Formats arguments according to the given format string.
  * Supports sequential, referential and associative formatting rules.
- * @param  {string} formatString
- * @param  {...number|Object} vararg The arguments to be passed when formatting non-associative
+ * @param  {String|TemplateString} formatString
+ * @param  {...*|Object} vararg The arguments to be passed when formatting non-associative
  * OR the object holding the key value pairs for associative formatting
- * @return {string}
+ * @return {String}
  */
 function esprintf(formatString) {
 	if (formatString instanceof Array) {
@@ -203,7 +203,7 @@ function esprintf(formatString) {
 			}
 		} else {
 			if (assocReference) {
-				throw new SyntaxError('Cannot use associative parameters mixed with non associative using json');
+				throw new Error('Cannot use associative parameters mixed with non associative using json');
 			}
 			value = parentArguments[reference];
 		}
@@ -213,7 +213,7 @@ function esprintf(formatString) {
 			valueIdx++;
 
 			if (width === undefined) {
-				throw new Error('No value for dynamic width for parameter no. ' + (reference - 2));
+				throw new Error('No value for dynamic width for parameter no. ' + (reference - 1));
 			}
 		} else {
 			width = parseInt(width, 10);
@@ -243,7 +243,7 @@ function esprintf(formatString) {
 		precision = parseInt(precision, 10);
 
 		if (isNaN(precision)) {
-			throw new TypeError('Bad precision value for format parameter no. ' + reference - 1);
+			throw new TypeError('Bad precision value for format parameter no. ' + (reference - 1));
 		}
 
 		if (specifier.type === types.number && !parseInt(value, 10)) {

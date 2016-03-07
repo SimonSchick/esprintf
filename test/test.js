@@ -31,10 +31,8 @@ describe('esprintf', () => {
 
 		it('Throws when no parameter for dynamic width is set', () => {
 			assert.throws(
-				() => {
-					esprintf('%*s', 'test');
-				},
-				/No value for dynamic width for parameter no/
+				() => esprintf('%*s', 'test'),
+				/No value for dynamic width for parameter no\. 1/
 			);
 		});
 
@@ -44,6 +42,13 @@ describe('esprintf', () => {
 					esprintf('%.*d', 21);
 				},
 				/No value for dynamic precision for parameter no/
+			);
+		});
+
+		it('Throws when using bad precision value', () => {
+			assert.throws(
+				() => esprintf('%.*d', 21, 'test'),
+				/Bad precision value for format parameter no\. 1/
 			);
 		});
 
